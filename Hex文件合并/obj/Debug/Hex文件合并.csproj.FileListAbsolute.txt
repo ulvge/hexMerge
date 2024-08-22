@@ -1,0 +1,9 @@
+E:\3Proj\@VSPorj\4MergeBin\hexMerge\Hex文件合并\bin\Debug\HexMerge.exe
+E:\3Proj\@VSPorj\4MergeBin\hexMerge\Hex文件合并\bin\Debug\HexMerge.pdb
+E:\3Proj\@VSPorj\4MergeBin\hexMerge\Hex文件合并\obj\Debug\Hex文件合并.Form1.resources
+E:\3Proj\@VSPorj\4MergeBin\hexMerge\Hex文件合并\obj\Debug\HexMerge.Properties.Resources.resources
+E:\3Proj\@VSPorj\4MergeBin\hexMerge\Hex文件合并\obj\Debug\Hex文件合并.csproj.GenerateResource.cache
+E:\3Proj\@VSPorj\4MergeBin\hexMerge\Hex文件合并\obj\Debug\Hex文件合并.csproj.CoreCompileInputs.cache
+E:\3Proj\@VSPorj\4MergeBin\hexMerge\Hex文件合并\obj\Debug\HexMerge.exe
+E:\3Proj\@VSPorj\4MergeBin\hexMerge\Hex文件合并\obj\Debug\HexMerge.pdb
+E:\3Proj\@VSPorj\4MergeBin\hexMerge\Hex文件合并\obj\Debug\Hex文件合并.csproj.AssemblyReference.cache

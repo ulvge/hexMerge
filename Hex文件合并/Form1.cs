@@ -38,9 +38,13 @@ namespace Hex文件合并
         {
             InitializeComponent();
             //允许拖拽
-            this.AllowDrop = true;
-            this.DragEnter += new DragEventHandler(Form1_DragEnter);
-            this.DragDrop += new DragEventHandler(Form1_DragDrop);
+            boot_textBox.AllowDrop = true;
+            boot_textBox.DragEnter += new DragEventHandler(boot_textBox_DragEnter);
+            boot_textBox.DragDrop += new DragEventHandler(boot_textBox_DragDrop);
+
+            app_textBox.AllowDrop = true;
+            app_textBox.DragEnter += new DragEventHandler(app_textBox_DragEnter);
+            app_textBox.DragDrop += new DragEventHandler(app_textBox_DragDrop);
 
             btn_help.Visible = true;
 
@@ -185,12 +189,18 @@ namespace Hex文件合并
             StreamWriter Newfile = null;
             DataLineMessage line = new DataLineMessage();
             string savepath = textOutPath.Text; // overwrite always
+            
+            var fileInfo = new FileInfo(savepath);
+            if (fileInfo.IsReadOnly)
+            {
+                fileInfo.IsReadOnly = false;
+            }
             //savepath = GetNewPathForDupes(textOutPath.Text);
             try
             {
                 if(str1=="")
                 {
-                    File.Copy(str2, savepath);
+                    File.Copy(str2, savepath, true);
                     if (checkBox2.Checked == true)//确定转换为bin文件
                     {
                         ConvertHex2Bin(savepath);
@@ -201,6 +211,7 @@ namespace Hex文件合并
                 }
                 else if (str2 == "")
                 {
+                    File.Copy(str1, savepath, true);
                     if (checkBox2.Checked == true)//确定是否合并文件
                     {
                         ConvertHex2Bin(savepath);
@@ -290,8 +301,10 @@ namespace Hex文件合并
             {
                 return false;
             }
-            using (FileStream fs = new FileStream(fileName, FileMode.Open))  //open file
+            try
             {
+                using (FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                {
                 StreamReader HexReader = new StreamReader(fs);    //读取数据流
                 string szLine = "";
                 string szHex = "";
@@ -357,6 +370,11 @@ namespace Hex文件合并
                 }
                 g_mergeBinPath = Path.ChangeExtension(fileName, "bin");
                 array_save_data(szAdd, szBin, szLen, g_mergeBinPath);   //保存为bin
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
             }
             return true;
         }
@@ -577,17 +595,50 @@ namespace Hex文件合并
                 textOutPath.Text = fileName;
             }
         }
-        void Form1_DragEnter(object sender, DragEventArgs e)
+        void boot_textBox_DragEnter(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop)) e.Effect = DragDropEffects.All;
             else e.Effect = DragDropEffects.None;
         }
-        void Form1_DragDrop(object sender, DragEventArgs e)
+        void boot_textBox_DragDrop(object sender, DragEventArgs e)
         {
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+            // 将第一个文件路径赋值给相应的TextBox
+            if (files.Length > 0)
+            {
+                TextBox textBox = sender as TextBox;
+                if (textBox != null)
+                {
+                    boot_textBox.Text = files[0];
+                }
+            }
             //获取第一个文件名
             string fileName = (e.Data.GetData(DataFormats.FileDrop, false) as String[])[0];
 
-            OpenDropFile(fileName);
+            //OpenDropFile(fileName);
+        }
+
+        void app_textBox_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop)) e.Effect = DragDropEffects.All;
+            else e.Effect = DragDropEffects.None;
+        }
+        void app_textBox_DragDrop(object sender, DragEventArgs e)
+        {
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+            // 将第一个文件路径赋值给相应的TextBox
+            if (files.Length > 0)
+            {
+                TextBox textBox = sender as TextBox;
+                if (textBox != null)
+                {
+                    app_textBox.Text = files[0];
+                }
+            }
+
+            //OpenDropFile(fileName);
         }
         void OpenDropFile(string file1)
         {
